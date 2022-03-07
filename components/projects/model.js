@@ -17,15 +17,9 @@ module.exports = {
   },
 
   editProject(id, data) {
-    // const newProject = new Project(project)
-    Project.updateOne({ _id: id }, data)
-      .then(result => console.log('>> edit: ', result))
-    // Project.findById(id)
-    //   .then(result => console.log('>> edit: ', result))
-    // console.log('>> EDIT: ', project)
-    // return newProject.save()
-    //   .then((result) => result)
-    //   .catch((err) => console.log('err: ', err))
+    return Project.updateOne({ _id: id }, data)
+      .then(() => console.log('>> edit: ', data))
+      .catch((err) => console.log('err: ', err))
   },
 
   deleteProject(id) {

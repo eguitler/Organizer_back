@@ -37,7 +37,7 @@ module.exports = {
 
     projectModel.createProject(newProject)
       .then((project) => res.send({
-        msg: 'new project created',
+        message: 'New project created',
         data: projectDto.single(project)
       }))
       .catch((err) => console.log('err: ', err))
@@ -49,21 +49,20 @@ module.exports = {
       id,
       ...data
     } = req.body
-    console.log('>> ', id)
-    console.log('>> ', data)
 
     projectModel.editProject(id, data)
-    // .then(() => res.status(200).send({
-    //   message: 'Project with id: ' + id + ' was updated with data: ' + data
-    // }))
-    // .catch(err => console.log('err ', err))
+      .then(() => res.status(200).send({
+        message: 'Project updated',
+        data
+      }))
+      .catch(err => console.log('err ', err))
   },
 
   deleteProject(req, res) {
     const { id } = req.query
     projectModel.deleteProject(id)
       .then(() => res.status(200).send({
-        message: 'Project with id: ' + id + ' was deleted'
+        message: 'Project deleted'
       }))
       .catch(err => console.log('err ', err))
   }

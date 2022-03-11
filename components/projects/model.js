@@ -8,6 +8,12 @@ module.exports = {
       .catch((err) => console.log('err: ', err))
   },
 
+  getProject(id) {
+    return Project.findById(id)
+      .then((result) => result)
+      .catch((err) => console.log('err: ', err))
+  },
+
   createProject(project) {
     const newProject = new Project(project)
 
@@ -18,7 +24,7 @@ module.exports = {
 
   editProject(id, data) {
     return Project.updateOne({ _id: id }, data)
-      .then(() => console.log('>> edit: ', data))
+      .then((result) => result)
       .catch((err) => console.log('err: ', err))
   },
 

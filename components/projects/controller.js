@@ -10,6 +10,14 @@ module.exports = {
     // .catch((err) => res.status(500).send({}))
   },
 
+  getProject(req, res) {
+    const { id } = req.params
+
+    projectModel.getProject(id)
+      .then((project) => res.send(projectDto.single(project)))
+      .catch((err) => console.log('err: ', err))
+  },
+
   createProject(req, res) {
     const {
       title,
@@ -56,7 +64,6 @@ module.exports = {
     // se hacen validaciones y si todo sale bien
     // se llama al modelo para la creacion
     // si no se levantan los errores
-    console.log('>> saving: ', newProject)
     projectModel.createProject(newProject)
       .then((project) => res.send({
         message: 'New project created',

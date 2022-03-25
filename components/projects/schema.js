@@ -12,7 +12,8 @@ const projectSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
     maxlength: 6,
-    required: true
+    required: true,
+    unique: true
   },
   tasks: {
     type: Array,

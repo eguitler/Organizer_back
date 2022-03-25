@@ -3,7 +3,7 @@ const { Router } = require('express')
 
 const router = Router()
 
-router.get('/tasks/:projectId?', controller.getTasks)
+router.get('/tasks/:projectCode?', controller.getTasks)
 // router.get('/projects/:id', controller.getProject)
 router.post('/tasks/create', controller.createTask)
 // router.delete('/projects/delete', controller.deleteProject)

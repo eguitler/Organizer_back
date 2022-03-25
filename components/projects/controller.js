@@ -11,10 +11,16 @@ module.exports = {
   },
 
   getProject (req, res) {
-    const { id } = req.params
-
-    projectModel.getProject(id)
-      .then((project) => res.send(projectDto.single(project)))
+    const { code } = req.params
+    console.log('>>>>>>>>>>>>>>> CODE PARAMS : ', code)
+    console.log('>>>>>>>>>>>>>>> PARAMS : ', req.params)
+    projectModel.getProject(code)
+      .then((project) => {
+        console.log('>>>>>>>>>>>>>> PROJECT FOUND ', project)
+        const dto = projectDto.single(project)
+        console.log('>>>>>>>>>>>>>> PROJECT DTO ', dto)
+        res.send(dto)
+      })
       .catch((err) => {
         res.status(404).send({ error: 'Project not found' })
         console.log('err: ', err)
@@ -64,11 +70,11 @@ module.exports = {
 
   editProject (req, res) {
     const {
-      id,
+      code,
       ...data
     } = req.body
-
-    projectModel.editProject(id, data)
+    console.log('>>> EDIT PROJECT ', req.body)
+    projectModel.editProject(code, data)
       .then(() => res.status(200).send({
         message: 'Project updated',
         data

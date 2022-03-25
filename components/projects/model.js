@@ -8,8 +8,8 @@ module.exports = {
       .catch((err) => console.log('err: ', err))
   },
 
-  getProject (id) {
-    return Project.findById(id)
+  getProject (code) {
+    return Project.findOne({ code: code })
       .then((result) => result)
       .catch((err) => console.log('err: ', err))
   },
@@ -22,20 +22,20 @@ module.exports = {
       .catch((err) => console.log('err: ', err))
   },
 
-  editProject (id, data) {
-    return Project.updateOne({ _id: id }, data)
+  editProject (code, data) {
+    return Project.updateOne({ code: code }, data)
       .then((result) => result)
       .catch((err) => console.log('err: ', err))
   },
 
-  deleteProject (id) {
-    return Project.deleteOne({ _id: id })
+  deleteProject (code) {
+    return Project.deleteOne({ code: code })
       .then(result => result)
       .catch(err => console.log('err: ', err))
   },
 
-  addTask ({ id, taskId }) {
-    return Project.findById(id)
+  addTask ({ projectCode, taskId }) {
+    return Project.findOne({ code: projectCode })
       .then(project => {
         project.tasks.push(taskId)
         project.save()

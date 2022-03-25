@@ -19,7 +19,7 @@ module.exports = {
   createTask (task) {
     const newTask = new Task(task)
     projectModel.addTask({
-      id: newTask.parentId,
+      projectCode: newTask.projectCode,
       taskId: newTask._id
     })
     return newTask.save()
@@ -27,9 +27,9 @@ module.exports = {
       .catch((err) => console.log('err: ', err))
   },
 
-  getTasksByProjectId (id) {
-    console.log('>>>> PROJECT ID: ', id)
-    return Task.find({ parentId: id })
+  getTasksByProjectCode (projectCode) {
+    // console.log('>>>> PROJECT CODE GETTING: ', projectCode)
+    return Task.find({ projectCode: projectCode })
       .then(tasks => tasks)
       .catch((err) => console.log('err: ', err))
   }

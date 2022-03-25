@@ -1,12 +1,23 @@
 const mongoose = require('mongoose')
 
 const projectSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String },
-  code: { type: String, length: 2 },
-  priority: { type: Number },
-  // createdAt: { type: Date },
-  tasks: { type: Array }
+  title: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String
+  },
+  code: {
+    type: String,
+    minlength: 2,
+    maxlength: 6,
+    required: true
+  },
+  tasks: {
+    type: Array,
+    required: true
+  }
 }, {
   timestamps: true
 })

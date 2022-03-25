@@ -3,8 +3,8 @@ const single = (project) => ({
   title: project.title,
   description: project.description,
   code: project.code,
-  priority: project.priority,
   createdAt: project.createdAt,
+  updatedAt: project.updatedAt,
   tasks: project.tasks
 })
 

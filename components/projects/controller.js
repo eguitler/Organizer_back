@@ -25,16 +25,11 @@ module.exports = {
     const {
       title,
       description,
-      code,
-      priority
+      code
     } = req.body
 
     if (title === '' || title === undefined) {
       res.status(400).send({ error: 'title is mandatory' })
-      return
-    }
-    if (description === '' || description === undefined) {
-      res.status(400).send({ error: 'description is mandatory' })
       return
     }
     if (code === '' || code === undefined) {
@@ -45,21 +40,11 @@ module.exports = {
       res.status(400).send({ error: 'code length has to be 2 characters' })
       return
     }
-    if (priority === '' || priority === undefined) {
-      res.status(400).send({ error: 'priority is mandatory' })
-      return
-    }
-    if (!Number.isInteger(priority)) {
-      res.status(400).send({ error: 'priority has to be a number (integer)' })
-      return
-    }
 
     const newProject = {
       title,
       description,
       code,
-      priority,
-      // createdAt: new Date().toISOString(),
       tasks: []
     }
 

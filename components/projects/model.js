@@ -2,19 +2,19 @@ const Project = require('./schema')
 
 module.exports = {
 
-  getProjects(page, limit) {
+  getProjects (page, limit) {
     return Project.find({})
       .then((results) => results)
       .catch((err) => console.log('err: ', err))
   },
 
-  getProject(id) {
+  getProject (id) {
     return Project.findById(id)
       .then((result) => result)
       .catch((err) => console.log('err: ', err))
   },
 
-  createProject(project) {
+  createProject (project) {
     const newProject = new Project(project)
 
     return newProject.save()
@@ -22,16 +22,24 @@ module.exports = {
       .catch((err) => console.log('err: ', err))
   },
 
-  editProject(id, data) {
+  editProject (id, data) {
     return Project.updateOne({ _id: id }, data)
       .then((result) => result)
       .catch((err) => console.log('err: ', err))
   },
 
-  deleteProject(id) {
+  deleteProject (id) {
     return Project.deleteOne({ _id: id })
       .then(result => result)
       .catch(err => console.log('err: ', err))
-  }
+  },
 
+  addTask ({ id, taskId }) {
+    return Project.findById(id)
+      .then(project => {
+        project.tasks.push(taskId)
+        project.save()
+      })
+      .catch((err) => console.log('err: ', err))
+  }
 }

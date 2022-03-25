@@ -3,22 +3,25 @@ const projectDto = require('./dto')
 
 module.exports = {
 
-  getProjects(req, res) {
+  getProjects (req, res) {
     projectModel.getProjects()
       .then((projects) => res.send(projectDto.multiple(projects)))
       .catch((err) => console.log('err: ', err))
     // .catch((err) => res.status(500).send({}))
   },
 
-  getProject(req, res) {
+  getProject (req, res) {
     const { id } = req.params
 
     projectModel.getProject(id)
       .then((project) => res.send(projectDto.single(project)))
-      .catch((err) => console.log('err: ', err))
+      .catch((err) => {
+        res.status(404).send({ error: 'Project not found' })
+        console.log('err: ', err)
+      })
   },
 
-  createProject(req, res) {
+  createProject (req, res) {
     const {
       title,
       description,
@@ -52,12 +55,11 @@ module.exports = {
     }
 
     const newProject = {
-      id: Date.now(),
       title,
       description,
       code,
       priority,
-      createdAt: new Date().toISOString(),
+      // createdAt: new Date().toISOString(),
       tasks: []
     }
 
@@ -75,7 +77,7 @@ module.exports = {
       })
   },
 
-  editProject(req, res) {
+  editProject (req, res) {
     const {
       id,
       ...data
@@ -89,7 +91,7 @@ module.exports = {
       .catch(err => console.log('err ', err))
   },
 
-  deleteProject(req, res) {
+  deleteProject (req, res) {
     const { id } = req.query
     projectModel.deleteProject(id)
       .then(() => res.status(200).send({
@@ -97,5 +99,4 @@ module.exports = {
       }))
       .catch(err => console.log('err ', err))
   }
-
 }

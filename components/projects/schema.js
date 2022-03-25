@@ -5,8 +5,10 @@ const projectSchema = new mongoose.Schema({
   description: { type: String },
   code: { type: String, length: 2 },
   priority: { type: Number },
-  createdAt: { type: Date },
+  // createdAt: { type: Date },
   tasks: { type: Array }
+}, {
+  timestamps: true
 })
 
 const Project = mongoose.model('Project', projectSchema)

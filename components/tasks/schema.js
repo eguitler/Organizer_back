@@ -1,14 +1,40 @@
 const mongoose = require('mongoose')
 
 const taskSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  code: { type: String, required: true, unique: true },
-  description: { type: String },
-  priority: { type: Number },
-  createdAt: { type: Date },
-  projectCode: { type: String },
-  subTasks: { type: Array, required: true },
-  isSubTask: { type: Boolean, required: true }
+  title: {
+    type: String,
+    required: true
+  },
+  code: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  description: {
+    type: String
+  },
+  priority: {
+    type: Number
+  },
+  createdAt: {
+    type: Date
+  },
+  projectCode: {
+    type: String
+  },
+  parent: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Project'
+  },
+  subTasks: {
+    type: Array,
+    required: true
+  },
+  isSubTask: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
 }, {
   timestamps: true
 })

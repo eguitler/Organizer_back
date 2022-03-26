@@ -3,22 +3,20 @@ const projectDto = require('./dto')
 
 module.exports = {
 
-  getProjects (req, res) {
-    projectModel.getProjects()
+  all: (req, res) => {
+    projectModel.all()
       .then((projects) => res.send(projectDto.multiple(projects)))
-      .catch((err) => console.log('err: ', err))
-    // .catch((err) => res.status(500).send({}))
+      .catch((err) => {
+        console.log('err: ', err)
+        res.status(500).send({})
+      })
   },
 
-  getProject (req, res) {
+  find: (req, res) => {
     const { code } = req.params
-    console.log('>>>>>>>>>>>>>>> CODE PARAMS : ', code)
-    console.log('>>>>>>>>>>>>>>> PARAMS : ', req.params)
-    projectModel.getProject(code)
+    projectModel.find(code)
       .then((project) => {
-        console.log('>>>>>>>>>>>>>> PROJECT FOUND ', project)
         const dto = projectDto.single(project)
-        console.log('>>>>>>>>>>>>>> PROJECT DTO ', dto)
         res.send(dto)
       })
       .catch((err) => {
@@ -27,7 +25,7 @@ module.exports = {
       })
   },
 
-  createProject (req, res) {
+  create: (req, res) => {
     const {
       title,
       description,
@@ -50,14 +48,13 @@ module.exports = {
     const newProject = {
       title,
       description,
-      code,
-      tasks: []
+      code
     }
 
     // se hacen validaciones y si todo sale bien
     // se llama al modelo para la creacion
     // si no se levantan los errores
-    projectModel.createProject(newProject)
+    projectModel.create(newProject)
       .then((project) => res.send({
         message: 'New project created',
         data: projectDto.single(project)
@@ -68,26 +65,32 @@ module.exports = {
       })
   },
 
-  editProject (req, res) {
-    const {
-      code,
-      ...data
-    } = req.body
-    console.log('>>> EDIT PROJECT ', req.body)
-    projectModel.editProject(code, data)
+  edit: (req, res) => {
+    const { code } = req.params
+    const data = req.body
+
+    console.log('>>> EDIT PROJECT ', code, ' --> ', req.body)
+    projectModel.edit(code, data)
       .then(() => res.status(200).send({
         message: 'Project updated',
         data
       }))
-      .catch(err => console.log('err ', err))
+      .catch(err => {
+        console.log('err ', err)
+        res.status(500).send({ err })
+      })
   },
 
-  deleteProject (req, res) {
-    const { id } = req.query
-    projectModel.deleteProject(id)
+  delete: (req, res) => {
+    const { code } = req.params
+
+    projectModel.delete(code)
       .then(() => res.status(200).send({
         message: 'Project deleted'
       }))
-      .catch(err => console.log('err ', err))
+      .catch(err => {
+        console.log('err ', err)
+        res.status(500).send({ err })
+      })
   }
 }

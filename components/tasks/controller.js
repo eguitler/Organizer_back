@@ -3,41 +3,32 @@ const taskDto = require('./dto')
 
 module.exports = {
 
-  getTasks (req, res) {
-    const { projectCode } = req.params
-    // console.log('>>>>>>>>>>>>> projectCode bool', req.params)
-
-    if (projectCode !== undefined) {
-      // console.log('>>>>>>>>>>>>> INSIDE projectCode', projectCode)
-      taskModel.getTasksByProjectCode(projectCode)
-        .then((tasks) => {
-          // console.log('>>>>>>>>>>>>>> TASK : ', tasks)
-          res.send(taskDto.multiple(tasks))
-        })
-        .catch((err) => console.log('err: ', err))
-      return
-    }
-
-    taskModel.getTasks()
+  all: (req, res) => {
+    taskModel.all()
       .then((tasks) => res.send(taskDto.multiple(tasks)))
-      .catch((err) => console.log('err: ', err))
-    // .catch((err) => res.status(500).send({}))
+      .catch((err) => {
+        console.log('err: ', err)
+        res.status(500).send({ err })
+      })
   },
 
-  // getTasksByProjectCode (req, res) {
-  //   const { projectCode } = req.body
-  //   taskModel.getTasksByProjectCode(projectCode)
-  //     .then((tasks) => res.send(taskDto.multiple(tasks)))
-  //     .catch((err) => console.log('err: ', err))
-  //   // .catch((err) => res.status(500).send({}))
-  // },
+  filterByProject: (req, res) => {
+    const { projectCode } = req.params
+    taskModel.filterByProject(projectCode)
+      .then((tasks) => res.send(taskDto.multiple(tasks)))
+      .catch((err) => {
+        console.log('err: ', err)
+        res.status(500).send({ err })
+      })
+  },
 
-  async createTask (req, res) {
+  create: async (req, res) => {
     const {
       title,
       description,
       priority,
-      projectCode
+      projectCode, // populate this in model
+      projectId
     } = req.body
 
     console.log(' >>>>>>>>>>>>>>>>>> BODY: ', req.body)
@@ -63,7 +54,7 @@ module.exports = {
     }
 
     async function getNextCode () {
-      const tasks = await taskModel.getTasksByProjectCode(projectCode)
+      const tasks = await taskModel.filterByProject(projectCode)
       const count = tasks.length + 1
       const countFourDigits = String(count).padStart(4, '0')
       // const prefix = await taskModel.getPrefixCodeByprojectCode(parentId)
@@ -75,20 +66,22 @@ module.exports = {
       title,
       description,
       priority,
-      subTasks: [],
-      isSubTask: false,
-      code: await getNextCode(),
-      projectCode
+      projectCode,
+      parent: projectId,
+      code: await getNextCode()
     }
 
     // se hacen validaciones y si todo sale bien
     // se llama al modelo para la creacion
     // si no se levantan los errores
-    taskModel.createTask(newTask)
-      .then((task) => res.send({
-        message: 'New task created',
-        data: taskDto.single(task)
-      }))
+    taskModel.create(newTask)
+      .then((task) => {
+        console.log('>>>>>>>> ?? TASK: ', task)
+        res.send({
+          message: 'New task created',
+          data: taskDto.single(task)
+        })
+      })
       .catch((err) => {
         console.log('err: ', err)
         res.status(500).send({ err })

@@ -6,7 +6,8 @@ const projectSchema = new mongoose.Schema({
     required: true
   },
   description: {
-    type: String
+    type: String,
+    default: ''
   },
   code: {
     type: String,
@@ -15,9 +16,14 @@ const projectSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  tasks: {
-    type: Array,
-    required: true
+  tasks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Task'
+  }],
+  tasksCount: {
+    type: Number,
+    required: true,
+    default: 0
   }
 }, {
   timestamps: true

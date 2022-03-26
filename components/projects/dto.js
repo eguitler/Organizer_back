@@ -5,7 +5,8 @@ const single = (project) => ({
   code: project.code,
   createdAt: project.createdAt,
   updatedAt: project.updatedAt,
-  tasks: project.tasks
+  tasks: project.tasks,
+  states: project.states
 })
 
 const multiple = (projects) => (

@@ -5,9 +5,9 @@ const router = Router()
 
 router.get('/tasks', controller.all)
 router.get('/tasks/:projectCode', controller.filterByProject)
-// router.get('/projects/:id', controller.getProject)
+// router.get('/tasks/:code', controller.getProject)
+router.delete('/tasks/:code/delete', controller.delete)
+router.put('/tasks/:code/edit', controller.edit)
 router.post('/tasks/create', controller.create)
-// router.delete('/projects/delete', controller.deleteProject)
-// router.put('/projects/edit', controller.editProject)
 
 module.exports = router

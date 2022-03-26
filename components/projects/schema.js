@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const { Todo, InProgress, Done } = require('../states')
+const stateSchema = require('../states/schema')
 
 const projectSchema = new mongoose.Schema({
   title: {
@@ -24,6 +26,10 @@ const projectSchema = new mongoose.Schema({
     type: Number,
     required: true,
     default: 0
+  },
+  states: {
+    type: [stateSchema],
+    default: [Todo, InProgress, Done]
   }
 }, {
   timestamps: true

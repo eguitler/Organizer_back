@@ -16,35 +16,49 @@ module.exports = {
       .catch((err) => console.log('err: ', err))
   },
 
-  create: (task) => {
+  create: async (task) => {
     const newTask = new Task(task)
 
+    const taskPop = await Task.populate(newTask, { path: 'parent' })
+    const parent = taskPop.parent
+
+    const projectCode = parent.code
+    const count = parent.tasksCount
+    const countFourDigits = String(count).padStart(4, '0')
+    newTask.code = `${projectCode}-${countFourDigits}`
+
     async function addTaskToProject () {
-      const taskPop = await Task.populate(newTask, { path: 'parent' })
-      taskPop.parent.tasks.push(newTask._id)
-      taskPop.parent.tasksCount++
-      taskPop.parent.save()
+      parent.tasks.push(newTask._id)
+      parent.tasksCount++
+      parent.save()
     }
 
     return newTask.save()
       .then((result) => {
-        console.log('>>>>>>>> ?? CREATE TASK : ', result)
         addTaskToProject()
         return result
       })
       .catch((err) => console.log('err: ', err))
+  },
+
+  edit: (code, data) => {
+    return Task.updateOne({ code: code }, data)
+      .then((result) => result)
+      .catch((err) => console.log('err: ', err))
+  },
+
+  delete: async (code) => {
+    const task = await Task.findOne({ code: code })
+    const taskPop = await Task.populate(task, { path: 'parent' })
+    const parent = taskPop.parent
+
+    parent.tasks = parent.tasks.filter(taskId => !taskId.equals(task._id))
+
+    return Task.deleteOne({ code: code })
+      .then(result => {
+        parent.save()
+        return result
+      })
+      .catch(err => console.log('err: ', err))
   }
-
-  // editProject (id, data) {
-  //   return Project.updateOne({ _id: id }, data)
-  //     .then((result) => result)
-  //     .catch((err) => console.log('err: ', err))
-  // },
-
-  // deleteProject (id) {
-  //   return Project.deleteOne({ _id: id })
-  //     .then(result => result)
-  //     .catch(err => console.log('err: ', err))
-  // }
-
 }

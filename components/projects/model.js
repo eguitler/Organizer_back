@@ -28,8 +28,15 @@ module.exports = {
       .catch((err) => console.log('err: ', err))
   },
 
-  delete: (code) => {
-    return Project.deleteOne({ code: code })
+  delete: async (code) => {
+    const project = await Project.findOne({ code: code })
+    const projectPop = await Project.populate(project, { path: 'tasks ' })
+    const tasks = projectPop.tasks
+
+    tasks.forEach(task => task.remove())
+
+    // console.log('>>>>>>>> TASKS DELETE ', tasks)
+    return project.remove()
       .then(result => result)
       .catch(err => console.log('err: ', err))
   }

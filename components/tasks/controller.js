@@ -53,22 +53,13 @@ module.exports = {
       return
     }
 
-    async function getNextCode () {
-      const tasks = await taskModel.filterByProject(projectCode)
-      const count = tasks.length + 1
-      const countFourDigits = String(count).padStart(4, '0')
-      // const prefix = await taskModel.getPrefixCodeByprojectCode(parentId)
-      const code = `${projectCode}-${countFourDigits}`
-      return code
-    }
-
     const newTask = {
       title,
       description,
       priority,
       projectCode,
-      parent: projectId,
-      code: await getNextCode()
+      parent: projectId
+      // code: await getNextCode()
     }
 
     // se hacen validaciones y si todo sale bien
@@ -86,6 +77,33 @@ module.exports = {
         console.log('err: ', err)
         res.status(500).send({ err })
       })
-  }
+  },
 
+  edit: (req, res) => {
+    const { code } = req.params
+    const data = req.body
+
+    taskModel.edit(code, data)
+      .then(() => res.status(200).send({
+        message: 'Task updated',
+        data
+      }))
+      .catch(err => {
+        console.log('err ', err)
+        res.status(500).send({ err })
+      })
+  },
+
+  delete: (req, res) => {
+    const { code } = req.params
+
+    taskModel.delete(code)
+      .then(() => res.status(200).send({
+        message: 'Task deleted'
+      }))
+      .catch(err => {
+        console.log('err ', err)
+        res.status(500).send({ err })
+      })
+  }
 }

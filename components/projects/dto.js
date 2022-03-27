@@ -6,7 +6,7 @@ const single = (project) => ({
   createdAt: project.createdAt,
   updatedAt: project.updatedAt,
   tasks: project.tasks,
-  states: project.states
+  tasksStatus: project.tasksStatus
 })
 
 const multiple = (projects) => (

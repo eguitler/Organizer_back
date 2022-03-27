@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const { Todo } = require('../tasksStatus')
+const tasksStatusSchema = require('../tasksStatus/schema')
 
 const taskSchema = new mongoose.Schema({
   title: {
@@ -34,6 +36,10 @@ const taskSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  status: {
+    type: tasksStatusSchema,
+    default: Todo
   }
 }, {
   timestamps: true

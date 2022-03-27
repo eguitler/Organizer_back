@@ -41,7 +41,17 @@ module.exports = {
       .catch((err) => console.log('err: ', err))
   },
 
-  edit: (code, data) => {
+  edit: async (code, data) => {
+    const task = await Task.findOne({ code: code })
+    const taskPop = await Task.populate(task, { path: 'parent' })
+    const parent = taskPop.parent
+
+    if (data.status) {
+      data.status = parent.tasksStatus.find(st => {
+        return st.name === data.status
+      })
+    }
+
     return Task.updateOne({ code: code }, data)
       .then((result) => result)
       .catch((err) => console.log('err: ', err))

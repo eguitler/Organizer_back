@@ -1,6 +1,6 @@
 module.exports = {
   Todo: {
-    name: 'TODO',
+    name: 'TO DO',
     color: 'blue'
   },
   InProgress: {

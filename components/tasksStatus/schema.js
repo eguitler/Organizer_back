@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const stateSchema = new mongoose.Schema({
+const tasksStatusSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -13,4 +13,4 @@ const stateSchema = new mongoose.Schema({
   timestamps: true
 })
 
-module.exports = stateSchema
+module.exports = tasksStatusSchema

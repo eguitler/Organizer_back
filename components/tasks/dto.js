@@ -8,7 +8,8 @@ const single = (task) => ({
   updatedAt: task.updatedAt,
   projectCode: task.projectCode,
   subTasks: task.subTasks,
-  isSubTask: task.isSubTask
+  isSubTask: task.isSubTask,
+  status: task.status
 })
 
 const multiple = (tasks) => (

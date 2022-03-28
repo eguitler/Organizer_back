@@ -13,12 +13,9 @@ module.exports = {
   },
 
   find: (req, res) => {
-    const { code } = req.params
-    projectModel.find(code)
-      .then((project) => {
-        const dto = projectDto.single(project)
-        res.send(dto)
-      })
+    const { id } = req.params
+    projectModel.find(id)
+      .then((project) => res.send(projectDto.single(project)))
       .catch((err) => {
         res.status(404).send({ error: 'Project not found' })
         console.log('err: ', err)
@@ -28,27 +25,17 @@ module.exports = {
   create: (req, res) => {
     const {
       title,
-      description,
-      code
+      description
     } = req.body
 
     if (title === '' || title === undefined) {
       res.status(400).send({ error: 'title is mandatory' })
       return
     }
-    if (code === '' || code === undefined) {
-      res.status(400).send({ error: 'code is mandatory' })
-      return
-    }
-    if (code.length !== 2) {
-      res.status(400).send({ error: 'code length has to be 2 characters' })
-      return
-    }
 
     const newProject = {
       title,
-      description,
-      code
+      description
     }
 
     // se hacen validaciones y si todo sale bien
@@ -66,11 +53,10 @@ module.exports = {
   },
 
   edit: (req, res) => {
-    const { code } = req.params
+    const { id } = req.params
     const data = req.body
 
-    console.log('>>> EDIT PROJECT ', code, ' --> ', req.body)
-    projectModel.edit(code, data)
+    projectModel.edit(id, data)
       .then(() => res.status(200).send({
         message: 'Project updated',
         data
@@ -82,9 +68,9 @@ module.exports = {
   },
 
   delete: (req, res) => {
-    const { code } = req.params
+    const { id } = req.params
 
-    projectModel.delete(code)
+    projectModel.delete(id)
       .then(() => res.status(200).send({
         message: 'Project deleted'
       }))

@@ -1,8 +1,13 @@
 const mongoose = require('mongoose')
 const { Todo, InProgress, Done } = require('../tasksStatus')
 const tasksStatusSchema = require('../tasksStatus/schema')
+const shortid = require('shortid')
 
 const projectSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: shortid.generate
+  },
   title: {
     type: String,
     required: true
@@ -11,15 +16,8 @@ const projectSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  code: {
-    type: String,
-    minlength: 2,
-    maxlength: 6,
-    required: true,
-    unique: true
-  },
   tasks: [{
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'Task'
   }],
   tasksCount: {

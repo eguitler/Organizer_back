@@ -13,8 +13,8 @@ module.exports = {
   },
 
   filterByProject: (req, res) => {
-    const { projectCode } = req.params
-    taskModel.filterByProject(projectCode)
+    const { projectId } = req.params
+    taskModel.filterByProject(projectId)
       .then((tasks) => res.send(taskDto.multiple(tasks)))
       .catch((err) => {
         console.log('err: ', err)
@@ -27,23 +27,17 @@ module.exports = {
       title,
       description,
       priority,
-      projectCode, // populate this in model
       projectId
     } = req.body
 
-    console.log(' >>>>>>>>>>>>>>>>>> BODY: ', req.body)
     if (title === '' || title === undefined) {
       res.status(400).send({ error: 'title is mandatory' })
       return
     }
-    if (description === '' || description === undefined) {
-      res.status(400).send({ error: 'description is mandatory' })
-      return
-    }
-    if (projectCode === '' || projectCode === undefined) {
-      res.status(400).send({ error: 'projectCode is mandatory' })
-      return
-    }
+    // if (description === '' || description === undefined) {
+    //   res.status(400).send({ error: 'description is mandatory' })
+    //   return
+    // }
     if (priority === '' || priority === undefined) {
       res.status(400).send({ error: 'priority is mandatory' })
       return
@@ -57,17 +51,11 @@ module.exports = {
       title,
       description,
       priority,
-      projectCode,
       parent: projectId
-      // code: await getNextCode()
     }
 
-    // se hacen validaciones y si todo sale bien
-    // se llama al modelo para la creacion
-    // si no se levantan los errores
     taskModel.create(newTask)
       .then((task) => {
-        console.log('>>>>>>>> ?? TASK: ', task)
         res.send({
           message: 'New task created',
           data: taskDto.single(task)
@@ -80,10 +68,10 @@ module.exports = {
   },
 
   edit: (req, res) => {
-    const { code } = req.params
+    const { id } = req.params
     const data = req.body
 
-    taskModel.edit(code, data)
+    taskModel.edit(id, data)
       .then(() => res.status(200).send({
         message: 'Task updated',
         data
@@ -95,9 +83,9 @@ module.exports = {
   },
 
   delete: (req, res) => {
-    const { code } = req.params
+    const { id } = req.params
 
-    taskModel.delete(code)
+    taskModel.delete(id)
       .then(() => res.status(200).send({
         message: 'Task deleted'
       }))

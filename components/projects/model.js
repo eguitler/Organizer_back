@@ -8,8 +8,8 @@ module.exports = {
       .catch((err) => console.log('err: ', err))
   },
 
-  find: (code) => {
-    return Project.findOne({ code: code })
+  find: (id) => {
+    return Project.findById(id)
       .then((result) => result)
       .catch((err) => console.log('err: ', err))
   },
@@ -22,20 +22,19 @@ module.exports = {
       .catch((err) => console.log('err: ', err))
   },
 
-  edit: (code, data) => {
-    return Project.updateOne({ code: code }, data)
+  edit: (id, data) => {
+    return Project.findByIdAndUpdate(id, data)
       .then((result) => result)
       .catch((err) => console.log('err: ', err))
   },
 
-  delete: async (code) => {
-    const project = await Project.findOne({ code: code })
+  delete: async (id) => {
+    const project = await Project.findById(id)
     const projectPop = await Project.populate(project, { path: 'tasks ' })
     const tasks = projectPop.tasks
 
     tasks.forEach(task => task.remove())
 
-    // console.log('>>>>>>>> TASKS DELETE ', tasks)
     return project.remove()
       .then(result => result)
       .catch(err => console.log('err: ', err))

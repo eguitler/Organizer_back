@@ -1,16 +1,16 @@
 const mongoose = require('mongoose')
 const { Todo } = require('../tasksStatus')
 const tasksStatusSchema = require('../tasksStatus/schema')
+const shortid = require('shortid')
 
 const taskSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: shortid.generate
+  },
   title: {
     type: String,
     required: true
-  },
-  code: {
-    type: String,
-    // required: true,
-    unique: true
   },
   description: {
     type: String
@@ -21,11 +21,8 @@ const taskSchema = new mongoose.Schema({
   createdAt: {
     type: Date
   },
-  projectCode: {
-    type: String
-  },
   parent: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     ref: 'Project'
   },
   subTasks: {
